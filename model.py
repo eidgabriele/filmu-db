@@ -29,7 +29,7 @@ class Studio(Base):
     id = Column(Integer, primary_key = True)
     name = Column("name", String)
     country = Column("country", String)
-    movie_studio = relationship("Movie_studio", back_populates = 'studios')
+    movie_studios = relationship("Movie_studio", back_populates = 'studios')
 
     def __repr__(self):
         return f"{self.id}, {self.name}, {self.country}"
