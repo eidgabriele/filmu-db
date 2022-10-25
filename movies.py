@@ -7,7 +7,7 @@ session = sessionmaker(engine)()
 
 def choose_crud(object_class):
     print(f"You have selected {object_class.__name__}")
-    print(f"Available actions:\n1 - view records,\n2 - add a new record,\n3 - delete record,\n4 - add genre to movie,\n5 - add studio to movie")
+    print(f"Available actions:\n1 - view records,\n2 - add a new record,\n3 - delete record,\n4 - add genre to movie,\n5 - add studio to movie\n6 - add director to movie")
     selection = str(input("Choose next step: "))
     if selection == "1":
         pprint(read_object(object_class))
@@ -26,16 +26,18 @@ def choose_crud(object_class):
         if record_id:
             delete_object(object_class, record_id)
             print(f"Record id {record_id} was successfully removed from the database")
-    elif selection == "4":
+    elif object_class == Movie and selection == "4":
         add_genre()
-    elif selection == "5":
+    elif object_class == Movie and selection == "5":
         add_movie_studio()
+    elif object_class == Director and selection == "6":
+        add_movie_director()
     else:
         print("Unavailabe option, try again.")
 
 def movie_detailed():
     pprint(read_object(Movie))
-    print("---Input movie id for detailed information---")
+    print("---Enter movie id for detailed information---")
     try:
         movie_id = int(input("Movie id: "))
     except ValueError:
@@ -57,8 +59,27 @@ def movie_detailed():
             for studio in selected_movie.movie_studios:
                 print(studio.studios.name)
 
+def add_movie_director():
+    print("---Enter movie id to add/edit director---")
+    try:
+        pprint(read_object(Movie))
+        movie_id = int(input("Movie id: "))
+        print("Select director id from the following:")
+        pprint(read_object(Director))
+        director_id = int(input("Director id: "))
+    except ValueError:
+        print("Error, bad input")
+    else:
+        update_object(Movie, movie_id, director_id = director_id)
+        print(f"Director id {director_id} was added to movie id {movie_id}")
+        selected_movie = session.query(Movie).get(movie_id)
+        print(f"Name: {selected_movie.name} ({selected_movie.release_year})")
+        print(f"Director: {selected_movie.director.name} {selected_movie.director.surname}")
+
+
+
 def add_movie_studio():
-    print("---Input movie id to add studios---")
+    print("---Enter movie id to add studios---")
     try:
         movie_id = int(input("Movie id: "))
         pprint(read_object(Studio))
@@ -71,7 +92,7 @@ def add_movie_studio():
             print(f"Studio {session.query(Studio).get(studio_id)} was added successfully to movie {session.query(Movie).get(movie_id).name}")
 
 def add_genre():
-    print("---Input movie id to add genres---")
+    print("---Enter movie id to add genres---")
     try:
         movie_id = int(input("Movie id: "))
         pprint(read_object(Genre))
