@@ -1,5 +1,4 @@
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import func
 from model import *
 from crud import *
 
