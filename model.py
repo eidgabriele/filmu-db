@@ -22,7 +22,7 @@ class Genre(Base):
     movie_genres = relationship("Movie_genre", back_populates = 'genres')
 
     def __repr__(self):
-        return f"{self.id}, {self.name}"
+        return f"{self.id} - {self.name}"
 
 class Studio(Base):
     __tablename__ = "studio"
@@ -48,7 +48,7 @@ class Movie(Base):
     movie_studios = relationship("Movie_studio", back_populates = "movies")
 
     def __repr__(self):
-        return f"{self.id}, {self.name}, {self.release_year}, {self.runtime}"
+        return f"{self.id} -  {self.name}, {self.release_year}"
 
     
 class Movie_genre(Base):
