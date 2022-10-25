@@ -13,6 +13,8 @@ def choose_crud(object_class):
         pprint(read_object(object_class))
         if object_class == Movie:
             movie_detailed()
+        if object_class == Director:
+            director_detailed()
     elif selection == "2":
         if object_class == Movie:
             add_movie()
@@ -45,7 +47,7 @@ def movie_detailed():
     else:
         if movie_id:
             selected_movie = session.query(Movie).get(movie_id)
-            print("----INFORMATION----")
+            print("----MOVIE INFORMATION----")
             print(f"Movie name: {selected_movie.name}")
             print(f"Release year: {selected_movie.release_year}")
             print(f"Budget: {selected_movie.budget}$")
@@ -54,10 +56,28 @@ def movie_detailed():
             print(f"Director: {selected_movie.director.name} {selected_movie.director.surname}")
             print("Genres:")
             for genre in selected_movie.movie_genres:
-                print(genre.genres.name)
+                print(f" - {genre.genres.name}")
             print("Studios:")
             for studio in selected_movie.movie_studios:
-                print(studio.studios.name)
+                print(f" - {studio.studios.name}")
+
+def director_detailed():
+    pprint(read_object(Director))
+    print("---Enter director id for detailed information---")
+    try:
+        director_id = int(input("Director id: "))
+    except ValueError:
+        print("Error, bad input")
+    else:
+        selected_director = session.query(Director).get(director_id)
+        print("----DIRECTOR INFORMATION----")
+        print(f"Name: {selected_director.name}")
+        print(f"Surname: {selected_director.surname}")
+        print(f"Directed movies:")
+        for movie in selected_director.movies:
+            print(f"  {movie.name} ({movie.release_year}), budget {movie.budget}$")
+
+
 
 def add_movie_director():
     print("---Enter movie id to add/edit director---")
