@@ -169,12 +169,20 @@ def statistics():
     print(f"Directors: {session.query(Director).count()}")
     print(f"Studios: {session.query(Studio).count()}")
     with engine.connect() as conn:
-        oldest = conn.exec_driver_sql("""SELECT * FROM Movie ORDER BY release_year ASC LIMIT 1""")
+        oldest = conn.exec_driver_sql('SELECT * FROM Movie ORDER BY release_year ASC LIMIT 3')
+        print(f"Oldest movies:")
         for old in oldest:
-            print(f"Oldest movie: {old.name} ({old.release_year})")
-        longest = conn.exec_driver_sql('SELECT * FROM Movie ORDER BY runtime DESC LIMIT 1')
+            print(f"   ◉  {old.name} ({old.release_year})")
+        longest = conn.exec_driver_sql('SELECT * FROM Movie ORDER BY runtime DESC LIMIT 3')
+        print(f"The longest movies:")
         for long in longest:
-            print(f"Longest movie: {long.name} {long.runtime} minutes")
+            print(f"   ◉  {long.name} - {long.runtime} minutes")
+        most_expensive = conn.exec_driver_sql('SELECT * FROM Movie ORDER BY budget DESC LIMIT 3')
+        print(f"The most expensive movies:")
+        for expensive in most_expensive:
+            print(f"   ◉  {expensive.name} - {expensive.budget}$")
+            
+
         
     
 
